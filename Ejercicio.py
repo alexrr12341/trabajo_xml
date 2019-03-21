@@ -8,6 +8,7 @@ def contar_radares(doc):
 	return cuenta
 def pedirycarreteraradares(doc,provincia):
 	indicador=False
+	contador=1
 	lista=doc.xpath("//PROVINCIA/NOMBRE/text()")
 	for provincias in lista:
 		if provincias.upper()==provincia.upper():
@@ -17,9 +18,10 @@ def pedirycarreteraradares(doc,provincia):
 		input("Pulse Enter para continuar.")
 		dic=doc.xpath("//PROVINCIA[NOMBRE='%s']/CARRETERA/DENOMINACION/text()"%(provincia.title()))
 		for estadisticas in dic:
-			print("Carretera-->",estadisticas)
-		dic2=doc.xpath("count(//PROVINCIA[NOMBRE='%s]/CARRETERA/RADAR)"%(provincia.title()))
-		print(dic2)
+			print("Carretera",contador,"-->",estadisticas)
+			contador+=1
+		dic2=doc.xpath("count(//PROVINCIA[NOMBRE='%s']//CARRETERA/RADAR)"%(provincia.title()))
+		print("Hay",int(dic2),"radares.")
 	else:
 		print("Esta provincia no esta en nuestra base de datos.")
 def pedirhabilidad(doc,habilidad):
@@ -69,7 +71,7 @@ while opcion!=0:
 			for provincias in listar_provincia(doc):
 				print(provincias)
 		elif opcion==2:
-			print(contar_radares(doc))
+			print("Hay",int(contar_radares(doc)),"radares")
 		elif opcion==3:
 			provincia=str(input("¿Cual es la provincia? "))
 			pedirycarreteraradares(doc,provincia)
