@@ -4,26 +4,24 @@ def listar_provincia(doc):
 	listaP=doc.xpath("//RADAR/../../NOMBRE/text()")
 	return listaP
 def contar_radares(doc):
-    lista=doc.xpath("count(//RADAR")
-    return lista
-def pediryestadisticas(doc,campeon):
-    indicador=False
-    listavar=['range','moveSpeed','armorBase','armorLevel','manaBase','manaLevel','criticalChanceBase','criticalChanceLevel','manaRegenBase','manaRegenLevel','healthRegenBase','healthRegenLevel','magicResistBase','magicResistLevel','healthBase','healthLevel','attackBase','attackLevel','ratingDefense','ratingMagic','ratingDifficulty','ratingAttack']
-    lista=doc.xpath("//Champion/name/text()")
-    listaE=doc.xpath("//Champion/estadisticas/range/text()")
-    for campeones in lista:
-        if campeon.upper()==campeones.upper():
-            indicador=True
-    if indicador:
-        print("Campeon detectado.")
-        input("Pulse Enter para continuar.")
-        for var in listavar:
-            print(var,end="")
-            dic=doc.xpath("//Champion[name='%s']/estadisticas/%s/text()"%(campeon.capitalize(),var))
-            for estadisticas in dic:
-                print("-->",estadisticas)
-    else:
-        print("Ese campeon no esta en nuestra base de datos.")
+	cuenta=doc.xpath("count(//CARRETERA/RADAR)")
+	return cuenta
+def pedirycarreteraradares(doc,provincia):
+	indicador=False
+	lista=doc.xpath("//PROVINCIA/NOMBRE/text()")
+	for provincias in lista:
+		if provincias.upper()==provincia.upper():
+			indicador=True
+	if indicador:
+		print("Provincia detectada.")
+		input("Pulse Enter para continuar.")
+		dic=doc.xpath("//PROVINCIA[NOMBRE='%s']/CARRETERA/DENOMINACION/text()"%(provincia.title()))
+		for estadisticas in dic:
+			print("Carretera-->",estadisticas)
+		dic2=doc.xpath("count(//PROVINCIA[NOMBRE='%s]/CARRETERA/RADAR)"%(provincia.title()))
+		print(dic2)
+	else:
+		print("Esta provincia no esta en nuestra base de datos.")
 def pedirhabilidad(doc,habilidad):
     lista=doc.xpath("//Champion/abilities/Ability/name/text()")
     indicador=False
@@ -71,9 +69,10 @@ while opcion!=0:
 			for provincias in listar_provincia(doc):
 				print(provincias)
 		elif opcion==2:
-			print("Hola")
+			print(contar_radares(doc))
 		elif opcion==3:
-			print("Adios")
+			provincia=str(input("¿Cual es la provincia? "))
+			pedirycarreteraradares(doc,provincia)
 		elif opcion==4:
 			print("Jeje")
 		elif opcion==5:
