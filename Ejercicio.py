@@ -24,29 +24,27 @@ def pedirycarreteraradares(doc,provincia):
 		print("Hay",int(dic2),"radares.")
 	else:
 		print("Esta provincia no esta en nuestra base de datos.")
-def pedirhabilidad(doc,habilidad):
-    lista=doc.xpath("//Champion/abilities/Ability/name/text()")
+def pediryprovinciayradares(doc,carretera):
     indicador=False
-    for habilidades in lista:
-        if habilidad.upper()==habilidades.upper():
+    lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
+    for carreteras in lista:
+        if carretera.upper()==carreteras.upper():
             indicador=True
     if indicador:
-        print("Habilidad detectada.")
-        input("Presione Enter para averiguar de que campeon se trata.")
-        dic=doc.xpath("//Champion/abilities/Ability[name='%s']/../../name/text()"%habilidad.capitalize())
-        for champion in dic:
-            return champion
+        print("Carretera detectada.")
+        input("Presione Enter para continuar.")
+        rad=doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.upper()))
+        print("Hay",int(rad),"radares.")
     else:
-        print("Esa habilidad no esta en nuestra base de datos.")
-
-def guiacampeon(doc,campeon):
-    lista=doc.xpath("//Champion/name/text()")
+    	print("Esta carretera no esta en nuestra base de datos.")
+def pedirycoordenadas(doc,carretera):
+    lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
     indicador=False
-    for campeones in lista:
-         if campeon.upper()==campeones.upper():
+    for carreteras in lista:
+         if carretera.upper()==carreteras.upper():
             indicador=True
     if indicador:
-        print("Campeon detectado.")
+        print("Carretera detectada.")
         input("Pulse Enter para continuar.")
         webbrowser.open_new("https://euw.op.gg/champion/%s"%campeon.capitalize())
         system('echo "" && clear')
@@ -76,9 +74,16 @@ while opcion!=0:
 			provincia=str(input("¿Cual es la provincia? "))
 			pedirycarreteraradares(doc,provincia)
 		elif opcion==4:
-			print("Jeje")
+			lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
+			for carreteras in lista:
+				print(carreteras)
+			carretera=str(input("¿Cual es la carretera? "))
+			pediryprovinciayradares(doc,carretera)
 		elif opcion==5:
-			print("Bye")
+			lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
+			for carreteras in lista:
+				print(carreteras)
+			carretera=str(input("¿Cual es la carretera? "))
+			pedirycoordenadas(doc,carretera)
 		elif opcion==0:
 				print("Fin del programa.")
-
