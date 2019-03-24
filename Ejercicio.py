@@ -25,31 +25,47 @@ def pedirycarreteraradares(doc,provincia):
 	else:
 		print("Esta provincia no esta en nuestra base de datos.")
 def pediryprovinciayradares(doc,carretera):
-    indicador=False
-    lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
-    for carreteras in lista:
-        if carretera.upper()==carreteras.upper():
-            indicador=True
-    if indicador:
-        print("Carretera detectada.")
-        input("Presione Enter para continuar.")
-        rad=doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.upper()))
-        print("Hay",int(rad),"radares.")
-    else:
-    	print("Esta carretera no esta en nuestra base de datos.")
+	indicador=False
+	lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
+	for carreteras in lista:
+		if carretera.upper()==carreteras.upper():
+			indicador=True
+	if indicador:
+		print("Carretera detectada.")
+		input("Presione Enter para continuar.")
+		rad=doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.upper()))
+		prov=doc.xpath("//CARRETERA[DENOMINACION='%s']/../NOMBRE/text()"%(carretera.upper()))
+		for nombre in prov:
+			print("Pasa por",nombre)
+		print("Hay",int(rad),"radares.")
+	else:
+		print("Esta carretera no esta en nuestra base de datos.")
 def pedirycoordenadas(doc,carretera):
-    lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
-    indicador=False
-    for carreteras in lista:
-         if carretera.upper()==carreteras.upper():
-            indicador=True
-    if indicador:
-        print("Carretera detectada.")
-        input("Pulse Enter para continuar.")
-        webbrowser.open_new("https://euw.op.gg/champion/%s"%campeon.capitalize())
-        system('echo "" && clear')
-    else:
-        print("Este campeon no esta en nuestra base de datos.")
+	lista=doc.xpath("//CARRETERA/DENOMINACION/text()")
+	indicador=False
+	for carreteras in lista:
+		if carretera.upper()==carreteras.upper():
+			 indicador=True
+	if indicador:
+		print("Carretera detectada.")
+		input("Pulse Enter para continuar.")
+		rad=doc.xpath("count(//CARRETERA[DENOMINACION='%s']/RADAR)"%(carretera.upper()))
+		print("Hay",int(rad),"radares.")
+		LatitudesI=doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_INICIAL/LATITUD/text()"%(carretera.upper()))
+		LongitudesI=doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_INICIAL/LONGITUD/text()"%(carretera.upper()))
+		LatitudesF=doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_FINAL/LATITUD/text()"%(carretera.upper()))
+		LongitudesF=doc.xpath("//CARRETERA[DENOMINACION='%s']/RADAR/PUNTO_FINAL/LONGITUD/text()"%(carretera.upper()))
+		for i in range(0,int(rad)):
+			print("Radar",i,":")
+			print("Latitud Inicial:",LatitudesI[i])
+			print("Longitud Inicial:",LongitudesI[i])
+			print("Latitud Final:",LatitudesF[i])
+			print("Longitud Final:",LongitudesF[i])
+			url='https://www.openstreetmap.org/directions?engine=graphhopper_car&route='+LatitudesI[i]+'%2C'+LongitudesI[i]+'%3B'+LatitudesF[i]+'%2C'+LongitudesF[i]+'#map=12/39.0407/-1.8079&layers=N'
+			print(url)
+
+	else:
+		print("Esa carretera no esta en nuestra base de datos.")
 opciones='''1.Listar Provincias
 2.Cantidad Radares
 3.Pedir Provincia y dar cantidad de radares y carreteras
